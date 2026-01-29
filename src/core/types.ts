@@ -4,6 +4,11 @@
 export type DataType = 'numeric' | 'date';
 
 /**
+ * score_mode の定義（複数のfunctionスコアを組み合わせる方法）
+ */
+export type ScoreMode = 'multiply' | 'sum' | 'avg' | 'first' | 'max' | 'min';
+
+/**
  * シミュレーション変数（X軸）の定義
  */
 export interface SimulationVariable {

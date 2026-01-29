@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import './App.css';
-import { SimulationVariable, FunctionScoreFunction } from './core/types';
+import { SimulationVariable, FunctionScoreFunction, ScoreMode } from './core/types';
 import { generateDataPoints } from './core/calculator';
 import { Layout } from './components/Layout';
 import { VariableConfig } from './components/VariableConfig';
@@ -18,6 +18,9 @@ function App() {
     min: 0,
     max: 100,
   });
+
+  // score_modeの状態（デフォルト: sum）
+  const [scoreMode, setScoreMode] = useState<ScoreMode>('sum');
 
   // Functions JSON文字列の状態
   const [functionsJson, setFunctionsJson] = useState<string>(
@@ -71,12 +74,12 @@ function App() {
     }
 
     try {
-      return generateDataPoints(simulationVariable, parsedFunctions);
+      return generateDataPoints(simulationVariable, parsedFunctions, scoreMode);
     } catch (error) {
       console.error('データポイント生成エラー:', error);
       return [];
     }
-  }, [simulationVariable, parsedFunctions]);
+  }, [simulationVariable, parsedFunctions, scoreMode]);
 
   // コールバックをメモ化して不要な再レンダリングを防ぐ
   const handleVariableChange = useCallback((variable: SimulationVariable) => {
@@ -87,10 +90,19 @@ function App() {
     setFunctionsJson(value);
   }, []);
 
+  const handleScoreModeChange = useCallback((mode: ScoreMode) => {
+    setScoreMode(mode);
+  }, []);
+
   // 左パネル: 設定エリア
   const leftPanel = (
     <div className="config-area">
-      <VariableConfig variable={simulationVariable} onChange={handleVariableChange} />
+      <VariableConfig
+        variable={simulationVariable}
+        scoreMode={scoreMode}
+        onChange={handleVariableChange}
+        onScoreModeChange={handleScoreModeChange}
+      />
       <FunctionConfig value={functionsJson} onChange={handleFunctionsJsonChange} error={jsonError} />
     </div>
   );
@@ -98,7 +110,7 @@ function App() {
   // 右パネル: グラフエリア
   const rightPanel = (
     <div className="chart-area">
-      <ScoreChart data={chartData} functionCount={parsedFunctions?.length || 0} />
+      <ScoreChart data={chartData} functionCount={parsedFunctions?.length || 0} scoreMode={scoreMode} />
     </div>
   );
 

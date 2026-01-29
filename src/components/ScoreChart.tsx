@@ -9,17 +9,20 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import { DataPoint } from '../core/types';
+import { DataPoint, ScoreMode } from '../core/types';
 
 interface ScoreChartProps {
   data: DataPoint[];
   functionCount: number;
+  scoreMode: ScoreMode;
 }
 
 /**
  * スコアチャートコンポーネント
  */
-export const ScoreChart = memo(function ScoreChart({ data, functionCount }: ScoreChartProps) {
+export const ScoreChart = memo(function ScoreChart({ data, functionCount, scoreMode }: ScoreChartProps) {
+  // combined scoreを表示するかどうか（関数が2つ以上の場合のみ）
+  const showCombined = functionCount >= 2;
   // 関数ごとに異なる色を割り当て
   const colors = [
     '#8884d8',
@@ -85,6 +88,20 @@ export const ScoreChart = memo(function ScoreChart({ data, functionCount }: Scor
               isAnimationActive={false}
             />
           ))}
+          {/* Combined Score のライン（関数が2つ以上の場合のみ） */}
+          {showCombined && (
+            <Line
+              key="combined"
+              type="monotone"
+              dataKey="combined"
+              name={`Combined (${scoreMode})`}
+              stroke="#ff6b6b"
+              strokeWidth={3}
+              strokeDasharray="8 4"
+              dot={false}
+              isAnimationActive={false}
+            />
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>

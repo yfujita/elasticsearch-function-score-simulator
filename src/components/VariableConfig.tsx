@@ -1,15 +1,22 @@
 import { memo } from 'react';
-import { SimulationVariable, DataType } from '../core/types';
+import { SimulationVariable, DataType, ScoreMode } from '../core/types';
 
 interface VariableConfigProps {
   variable: SimulationVariable;
+  scoreMode: ScoreMode;
   onChange: (variable: SimulationVariable) => void;
+  onScoreModeChange: (mode: ScoreMode) => void;
 }
 
 /**
  * シミュレーション変数の設定フォーム
  */
-export const VariableConfig = memo(function VariableConfig({ variable, onChange }: VariableConfigProps) {
+export const VariableConfig = memo(function VariableConfig({
+  variable,
+  scoreMode,
+  onChange,
+  onScoreModeChange,
+}: VariableConfigProps) {
   const handleFieldNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({
       ...variable,
@@ -40,6 +47,10 @@ export const VariableConfig = memo(function VariableConfig({ variable, onChange 
       ...variable,
       max: variable.dataType === 'date' ? e.target.value : parseFloat(e.target.value) || 0,
     });
+  };
+
+  const handleScoreModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onScoreModeChange(e.target.value as ScoreMode);
   };
 
   return (
@@ -85,6 +96,18 @@ export const VariableConfig = memo(function VariableConfig({ variable, onChange 
           onChange={handleMaxChange}
           step={variable.dataType === 'numeric' ? '0.1' : undefined}
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="scoreMode">Score Mode</label>
+        <select id="scoreMode" value={scoreMode} onChange={handleScoreModeChange}>
+          <option value="sum">sum (合計)</option>
+          <option value="multiply">multiply (乗算)</option>
+          <option value="avg">avg (平均)</option>
+          <option value="first">first (最初)</option>
+          <option value="max">max (最大)</option>
+          <option value="min">min (最小)</option>
+        </select>
       </div>
     </div>
   );

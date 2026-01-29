@@ -26,7 +26,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 10);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 10);
 
       expect(dataPoints).toHaveLength(10);
     });
@@ -48,7 +48,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 11);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 11);
 
       // 最初のポイントはmin
       expect(dataPoints[0].x).toBe(0);
@@ -75,7 +75,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 5);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 5);
 
       dataPoints.forEach((point) => {
         expect(point).toHaveProperty('x');
@@ -107,7 +107,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 5);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 5);
 
       dataPoints.forEach((point) => {
         expect(point).toHaveProperty('function0');
@@ -158,7 +158,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 10);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 10);
 
       expect(dataPoints).toHaveLength(10);
       // タイムスタンプ形式のx値
@@ -182,7 +182,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 3);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 3);
 
       const minTimestamp = new Date('2024-01-01T00:00:00.000Z').getTime();
       const maxTimestamp = new Date('2024-01-02T00:00:00.000Z').getTime();
@@ -210,7 +210,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 5);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 5);
 
       expect(dataPoints).toHaveLength(5);
       dataPoints.forEach((point) => {
@@ -235,7 +235,7 @@ describe('generateDataPoints', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 1);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 1);
 
       expect(dataPoints).toHaveLength(1);
       // points=1の場合、step = (max-min)/(1-1) = Infinity となり、
@@ -254,7 +254,7 @@ describe('generateDataPoints', () => {
 
       const functions: FunctionScoreFunction[] = [];
 
-      const dataPoints = generateDataPoints(variable, functions, 5);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 5);
 
       expect(dataPoints).toHaveLength(5);
       dataPoints.forEach((point) => {
@@ -584,7 +584,7 @@ describe('calculateFunctionScore', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 5);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 5);
 
       expect(dataPoints).toHaveLength(5);
       dataPoints.forEach((point) => {
@@ -620,7 +620,7 @@ describe('calculateFunctionScore', () => {
         },
       ];
 
-      const dataPoints = generateDataPoints(variable, functions, 20);
+      const dataPoints = generateDataPoints(variable, functions, 'sum', 20);
 
       dataPoints.forEach((point) => {
         expect(Number.isFinite(point.function0)).toBe(true);
